@@ -1,0 +1,12 @@
+[Unit]
+Description=Thermometer Monitors
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/bin/thermo.py -q -r /run/user/1000/latest.txt
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

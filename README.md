@@ -159,6 +159,95 @@ sudo ./configDS18B20
     (ctrl-c since I don't want to change that from 12 bits)
 ```
 
+### thermo.py - Polling Script
 
+This is a version of the script that I run on my Pi. It can handle 
+multiple probes with labels. Here's the help info:
 
+```
+usage: thermo.py [-h] [-l LOGFILE] [-q] [-r RAMFILE] [-s SLEEP]
 
+Record readings from DS18B20 thermometer
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l LOGFILE, --logfile LOGFILE
+                        specify log file to record readings
+  -q, --quiet           silence reports to stdout (use with -l)
+  -r RAMFILE, --ramfile RAMFILE
+                        store latest results in file on ramdrive
+  -s SLEEP, --sleep SLEEP
+                        time to sleep between readings
+```
+
+Why `ramfile`? The Pi runs on an SD card. It seemed like a bad idea to
+write the same short file over and over to the card. The Pi OS
+automatically creates a user ram disk usually at `/run/user/1000` so I
+decided to put my latest-reading file there. Yu could also put the
+running log file there if you wanted, but then you'll lose your log on
+any reboot.
+
+Before you use this program, you will need to edit it to add your 
+probe IDs to the `devs` list. 
+
+```
+cp thermo.py /home/pi/bin/thermo.py
+vi /home/pi/bin/thermo.py
+    # CHANGE THESE TO YOUR DEVICES AND LABELS
+    devs = (
+        {'dev':'28-011921372d21', 'loc':'hm_office'},
+        {'dev':'28-0119213fa93a', 'loc':'hm_outside'},
+    )
+```
+
+If you try to run the program and you get the `No matching devices found` 
+error, you probably have the wrong devices listed.
+
+#### Example usage:
+
+```
+bin/thermo.py -s 10 -l /run/user/1000/temps.csv -r /run/user/1000/latest.txt
+['2020-01-03 21:06:40', 'hm_office', '20.69', '69.24', 'hm_outside', '12.44', '54.39']
+['2020-01-03 21:06:52', 'hm_office', '20.69', '69.24', 'hm_outside', '12.44', '54.39']
+^CStopping on Ctrl-C
+
+# logfile has all the data
+cat /run/user/1000/temps.csv
+2020-01-03 21:06:40,hm_office,20.69,69.24,hm_outside,12.44,54.39
+2020-01-03 21:06:52,hm_office,20.69,69.24,hm_outside,12.44,54.39
+
+# ramfile has just the last reading
+cat /run/user/1000/latest.txt
+2020-01-03 21:06:52, hm_office, 20.69, 69.24, hm_outside, 12.44, 54.39
+```
+
+Console output is a dump of the results list, starting with a timestamp
+for the reading. Then for each device, it adds the `loc` label and the
+reading in degC and DegF. The logfile uses the same results, minus the
+python `[]` array brackets, so it's a usable CSV format.
+
+Note: In this example, I requested a `-s 10` sleep value of 10 seconds.
+You can see the results were reported about 12 seconds apart. Remember
+the probes take at least 750ms to read, so two probes will read about
+every 12 seconds. The default sleep is 28 seconds, giving a 30 second 
+actual interval. 
+
+#### Run as a Service
+
+`mythermo.service` is a basic systemd unit file that you can use to 
+keep the poller running as a service. To install and start it:
+
+```
+vi mythermo.service
+    # make any changes to the options on the ExecStart line
+
+sudo cp mythermo.service /etc/systemd/system
+sudo systemctl daemon-reload
+sudo systemctl start mythermo
+sudo systemctl enable mythermo
+sudo systemctl status mythermo
+    # to confirm the process is running
+cat /run/user/1000/latest.txt
+    # should see the most recent readings
+    2020-01-03 21:25:53, hm_office, 21.19, 70.14, hm_outside, 12.44, 54.39
+```
