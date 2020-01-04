@@ -18,9 +18,9 @@ project. Those wires are:
 Some Audrino projects run these probes at 5v, but the Pi GPIO data lines
 should not be sent more than 3.3v
 
-The circuit all requires a pull-up resistor of about 5k ohm resistance
-to connect the red and yellow lines. Most guides say to use a 4.7k 
-resistor but I have been using 5.1k resistors with no problems. 
+The circuit also requires a pull-up resistor of about 5k ohm resistance
+to connect the red and yellow lines. Either 4.7k or 5.1k seems to work
+just fine.
 
 ## Pi Connections
 
@@ -30,8 +30,9 @@ resistor but I have been using 5.1k resistors with no problems.
 * The data (yellow) wires can connect to any GPIO pin, but GPIO4 is the
   default for the one-wire network used by these probes. GPIO4 = pin 7.
 
-In practice, on my Pi 4 I have a case fan that uses pins 1, 6 for the fan.
-I am using pins 7 (GPIO4), 9 (GND), and 17 (3.3v) to connect my thermometers
+In practice, on my Pi 4, I have a case fan that uses pins 1, 6 for the
+fan. I am using pins 7 (GPIO4), 9 (GND), and 17 (3.3v) to connect my
+thermometers
 
 Note: the one-wire network can support up to 10 probes as long as the
 total network length doesn't get too long. I am using two of the 3M
@@ -39,4 +40,20 @@ probes wired in parallel to the same three pins with no problems.
 
 ## Breadboard Wiring
 
+<img src="./images/thermo_breadboard.svg" width="80%">
 
+This diagram uses a fourth row to allow for the space needed for the 
+pull-up resistor. You may just connect it between the red and yellow 
+rows directly, if you prefer.
+
+* Pick three rows for the probes wires - red, yellow and black.
+  Attach the wires of one probe to these rows.
+* Connect a jumper from the RPi pin 7 (GND) to the black row.
+* Connect a jumper from the RPi pin 5 (GPIO4) to the yellow row.
+* Pick another row nearby and connect the resistor between this 
+  new row and the yellow row.
+* Connect a jumper from the RPi pin 17 (3.3v) to the fourth row.
+* Connect a short jumper from the fourth row to the red row.
+
+To add additional probes later, just connect them to the existing 
+red, yellow, and black rows. 
