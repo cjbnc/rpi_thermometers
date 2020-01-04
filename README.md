@@ -1,4 +1,5 @@
-# rpi_thermometers
+# https://github.com/cjbnc/rpi_thermometers
+
 using DS18B20 thermometers with your raspberry pi
 
 ## Hardware
@@ -30,13 +31,13 @@ just fine.
 * The data (yellow) wires can connect to any GPIO pin, but GPIO4 is the
   default for the one-wire network used by these probes. GPIO4 = pin 7.
 
-In practice, on my Pi 4, I have a case fan that uses pins 1, 6 for the
-fan. I am using pins 7 (GPIO4), 9 (GND), and 17 (3.3v) to connect my
+In practice, on my Pi 4, I have a case fan that uses pins 1 and 6 for the
+fan. I am using pins 7 (GPIO4), 9 (GND), and 17 (3.3v) to connect to my
 thermometers
 
 Note: the one-wire network can support up to 10 probes as long as the
-total network length doesn't get too long. I am using two of the 3M
-probes wired in parallel to the same three pins with no problems.
+total network length doesn't get too long. I am using two of the 
+3-meter probes wired in parallel to the same three pins with no problems.
 
 ### Breadboard Wiring
 
@@ -62,7 +63,7 @@ Double-check your pin selections before turning on the Pi!
 
 ## Software
 
-### Enable one-wire drivers in the Raspian kernel
+### Enable one-wire drivers in the Raspbian kernel
 
 From the command line:
 
@@ -124,7 +125,7 @@ results back from the device. If you are taking one reading/probe every
 30 seconds or so, you have plenty of time.
 
 You now have all you need to write a polling program in your
-favorite language. The python code that I adpated in this repo just
+favorite language. The python code that I adapted in this repo just
 reads those device files every 30 seconds and parses the t-value out
 of the response.
 
@@ -183,7 +184,7 @@ optional arguments:
 Why `ramfile`? The Pi runs on an SD card. It seemed like a bad idea to
 write the same short file over and over to the card. The Pi OS
 automatically creates a user ram disk usually at `/run/user/1000` so I
-decided to put my latest-reading file there. Yu could also put the
+decided to put my latest-reading file there. You could also put the
 running log file there if you wanted, but then you'll lose your log on
 any reboot.
 
@@ -232,10 +233,10 @@ the probes take at least 750ms to read, so two probes will read about
 every 12 seconds. The default sleep is 28 seconds, giving a 30 second 
 actual interval. 
 
-#### Run as a Service
+#### Run as a service
 
 `mythermo.service` is a basic systemd unit file that you can use to 
-keep the poller running as a service. To install and start it:
+keep the program running as a service. To install and start it:
 
 ```
 vi mythermo.service
