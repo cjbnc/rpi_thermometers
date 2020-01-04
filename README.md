@@ -141,7 +141,7 @@ are returned should be in steps of:
 I tested two of my probes by leaving them running side-by-side
 overnight. They both stayed at a nearly constant 1-2 steps different as
 the temperature changed in my house. They are accurate to each other by
-less 0.25 deg F difference.
+less 0.25 deg F difference.  See [Accuracy Plot](./images/accuracy.png)
 
 If your probes are returning data in bigger steps than those listed
 above, there's a program floating around that you can run to check the
