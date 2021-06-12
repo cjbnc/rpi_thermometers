@@ -62,10 +62,14 @@ red, yellow, and black rows.
 Double-check your pin selections before turning on the Pi!
 
 Here's a simpler wiring diagram for one probe using a screw-terminal block
-to connect the thermometer.
+to connect the thermometer. 
 
 * [Diagram](images/terminal_wiring.png)
 * [Photo of my Breadboard](images/actual_wiring.jpg)
+
+Here's an example of two probes attached with screw-terminal blocks.
+
+* [Photo of Two Probe Board](images/actual_twoprobe.png)
 
 ## Software
 
