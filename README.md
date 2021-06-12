@@ -49,8 +49,8 @@ rows directly, if you prefer.
 
 * Pick three rows for the probes wires - red, yellow and black.
   Attach the wires of one probe to these rows.
-* Connect a jumper from the RPi pin 7 (GND) to the black row.
-* Connect a jumper from the RPi pin 5 (GPIO4) to the yellow row.
+* Connect a jumper from the RPi pin 9 (GND) to the black row.
+* Connect a jumper from the RPi pin 7 (GPIO4) to the yellow row.
 * Pick another row nearby and connect the resistor between this 
   new row and the yellow row.
 * Connect a jumper from the RPi pin 17 (3.3v) to the fourth row.
